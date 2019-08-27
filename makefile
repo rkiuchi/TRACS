@@ -41,10 +41,7 @@ CC = g++
 
 MV = mv
 
-#CRFLAGS = `/usr/local/root/bin/root-config --cflags`
-#CRFLAGS = `/usr/local/tracs/bin/root-config --cflags`
-#CRFLAGS = `/usr/local/TRACS/root6.10/bin/root-config --cflags`
-CRFLAGS = `/usr/local/TRACS/root6.12/bin/root-config --cflags`
+CRFLAGS = `/usr/local/root/bin/root-config --cflags`
 
 GC = g++ -g -std=c++11 -w -fPIC
 
@@ -52,12 +49,10 @@ GC = g++ -g -std=c++11 -w -fPIC
 CFLAGS = -w -g -std=c++11
 
 # define any directories containing header files other than /usr/include
-#INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/root/include/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
-INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/TRACS/root6.12/include/root/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
+INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/root/include/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
 
 # define library paths in addition to /usr/lib
-#LFLAGS = -L/usr/local/root/lib -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib
-LFLAGS = -L/usr/local/TRACS/root6.12/lib/root/ -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib   
+LFLAGS = -L/usr/local/root/lib -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib   
 
 # define any libraries to link into executable:
 LIBS = -ldolfin -lCore -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic -lTreePlayer -lTreeViewer -lHistPainter -lQtCore -lTable -lFFTW -lFITSIO -lGX11TTF -lPyROOT -lMinuit2 -lMathMore -lCling -lRooFit -lRooFitCore -lMatrix -lTMeasHeader -lTMeas -lTWaveform -lboost_system
