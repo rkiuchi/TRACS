@@ -41,7 +41,10 @@ CC = g++
 
 MV = mv
 
-CRFLAGS = `/usr/local/root/bin/root-config --cflags`
+#CRFLAGS = `/usr/local/root/bin/root-config --cflags`
+#CRFLAGS = `/usr/local/tracs/bin/root-config --cflags`
+#CRFLAGS = `/usr/local/TRACS/root6.10/bin/root-config --cflags`
+CRFLAGS = `/usr/local/TRACS/root6.12/bin/root-config --cflags`
 
 GC = g++ -g -std=c++11 -w -fPIC
 
@@ -49,10 +52,12 @@ GC = g++ -g -std=c++11 -w -fPIC
 CFLAGS = -w -g -std=c++11
 
 # define any directories containing header files other than /usr/include
-INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/root/include/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
+#INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/root/include/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
+INCLUDES = -I/usr/include/eigen3/ -I $(MYPWD)/include/  -I/usr/local/TRACS/root6.12/include/root/ -I/usr/include/qt4/QtCore/ -I/usr/include/qt4/ -I/usr/include/qt4/QtGui/
 
 # define library paths in addition to /usr/lib
-LFLAGS = -L/usr/local/root/lib -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib 
+#LFLAGS = -L/usr/local/root/lib -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib
+LFLAGS = -L/usr/local/TRACS/root6.12/lib/root/ -L $(MYPWD)/lib -L/usr/lib/x86_64-linux-gnu/ -L/usr/lib   
 
 # define any libraries to link into executable:
 LIBS = -ldolfin -lCore -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic -lTreePlayer -lTreeViewer -lHistPainter -lQtCore -lTable -lFFTW -lFITSIO -lGX11TTF -lPyROOT -lMinuit2 -lMathMore -lCling -lRooFit -lRooFitCore -lMatrix -lTMeasHeader -lTMeas -lTWaveform -lboost_system
@@ -66,16 +71,19 @@ SRCS = $(SDIR)TRACSFit.cpp $(SDIR)CarrierCollection.cpp $(SDIR)Carrier.cpp $(SDI
 
 ODIR = obj/
 #OBJ_ = TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
-OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+#OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o 
 OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
-OBJEDGE_ = Edge_tree.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+#OBJEDGE_ = Edge_tree.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+OBJEDGE_ = Edge_tree.o
 
 OBJ := $(patsubst %,$(ODIR)%,$(OBJ_))
 OBJB := $(patsubst %,$(ODIR)%,$(OBJB_))
 OBJC := $(patsubst %,$(ODIR)%,$(OBJC_))
 OBJEDGE := $(patsubst %,$(ODIR)%,$(OBJEDGE_))
 
-all: DoTracsOnly MfgTRACSFit Edge_tree 
+all: DoTracsOnly MfgTRACSFit Edge_tree
+all: Edge_tree 
 
 #MAIN = DoTRACSFit
 
@@ -91,7 +99,7 @@ EDGE = Edge_tree
 #	@$(CC) $(CFLAGS) $(INCLUDES) -o myApp/$(MAIN) $(OBJ) $(LFLAGS) $(LIBS)
 #	@$(BUILD_CMD)
 #	@echo +++Building SUCCESSFUL!
-	
+
 DoTracsOnly: $(OBJB)
 	@echo +++Compilation OK!
 	@echo +++Linking in progress...
@@ -105,20 +113,20 @@ MfgTRACSFit: $(OBJC)
 	@$(CC) $(CFLAGS) $(INCLUDES) -o myApp/$(MAINC) $(OBJC) $(LFLAGS) $(LIBS)
 	@$(BUILD_CMD)
 	@echo +++Building SUCCESSFUL!
-	
+
 Edge_tree: $(OBJEDGE)
 	@echo +++Compilation OK!
 	@echo +++Linking in progress...
 	@$(CC) $(CFLAGS) $(INCLUDES) -o myApp/$(EDGE) $(OBJEDGE) $(LFLAGS) $(LIBS)
 	@$(BUILD_CMD)
 	@echo +++Building SUCCESSFUL!
-	
+
 
 #$(ODIR)DoTRACSFit.o: src/DoTRACSFit.cpp
 #	@$(PRINT)
 #	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)DoTRACSFit.cpp -o $@
 #	@$(BUILD_CMD)
-	
+
 $(ODIR)DoTracsOnly.o: src/DoTracsOnly.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)DoTracsOnly.cpp -o $@
@@ -128,12 +136,12 @@ $(ODIR)MfgTRACSFit.o: src/MfgTRACSFit.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)MfgTRACSFit.cpp -o $@
 	@$(BUILD_CMD)
-	
+
 $(ODIR)Edge_tree.o: src/Edge_tree.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)Edge_tree.cpp -o $@
 	@$(BUILD_CMD)
-	
+
 $(ODIR)TRACSFit.o: $(SDIR)TRACSFit.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TRACSFit.cpp -o $@ 
@@ -193,23 +201,31 @@ $(ODIR)Utilities.o: $(SDIR)Utilities.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)Utilities.cpp -o $@	
 	@$(BUILD_CMD)
-	
+
 $(ODIR)TMeas.o: $(SDIR)TMeas.cpp
 	$(PRINT)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TMeas.cpp -o $@
 	rootcling -f $(SDIR)TMeasDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeas.h $(MYPWD)/include/LinkDef.h
+	$(CC) -shared -fPIC $(CFLAGS) $(INCLUDES) $(SDIR)TMeasDict.C $(SDIR)TMeas.cpp -o ./lib/libTMeas.so
+	cp $(SDIR)TMeasDict_rdict.pcm ./lib/
 	$(BUILD_CMD)
 
 $(ODIR)TWaveform.o: $(SDIR)TWaveform.cpp
 	$(PRINT)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TWaveform.cpp -o $@
-	rootcling -f $(SDIR)TWaveDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TWaveform.h
+#	rootcling -f $(SDIR)TWaveDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TWaveform.h
+	rootcling -f $(SDIR)TWaveDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TWaveform.h  $(MYPWD)/include/TWaveform_LinkDef.h
+	$(CC) -shared -fPIC $(CFLAGS) $(INCLUDES) $(SDIR)TWaveDict.C $(SDIR)TWaveform.cpp -o ./lib/libTWaveform.so
+	cp $(SDIR)TWaveDict_rdict.pcm ./lib/
 	$(BUILD_CMD)
-	
+
 $(ODIR)TMeasHeader.o: $(SDIR)TMeasHeader.cpp
 	$(PRINT)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TMeasHeader.cpp -o $@
-	rootcling -f $(SDIR)TMeasHeaderDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeasHeader.h
+#	rootcling -f $(SDIR)TMeasHeaderDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeasHeader.h
+	rootcling -f $(SDIR)TMeasHeaderDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeasHeader.h $(MYPWD)/include/TMeasHeader_LinkDef.h
+	$(CC) -shared -fPIC $(CFLAGS) $(INCLUDES) $(SDIR)TMeasHeaderDict.C $(SDIR)TMeasHeader.cpp -o ./lib/libTMeasHeader.so
+	cp $(SDIR)TMeasHeaderDict_rdict.pcm ./lib/
 	$(BUILD_CMD)
 
 $(ODIR)TMeasDict.o: $(SDIR)TMeasDict.C

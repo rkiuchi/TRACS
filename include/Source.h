@@ -11,7 +11,8 @@
  * You should have received a copy of the GNU Lesser General Public License along with TRACS. If not, see <http://www.gnu.org/licenses/>
  */
 
-#include <math.h>
+#include <cmath>
+#include <array>
 
 /*
  * SOURCE TERM
@@ -38,7 +39,18 @@
 	double z2 = 220.;
 	double z3 = 300.;
 	std::string NeffApproach = "Triconstant";
-	 
+
+
+    // For LGAD : Base of the effective doping level
+    double _lgad_bulk_base_neff;
+    double _coeff_gauss;
+
+    double _peak_height;
+    double _peak_position;
+    double _gauss_sigma;
+    double _f_poisson;
+    
+    
 	void eval(Array<double>& values, const Array<double>& x) const
 	{
 		if (NeffApproach == "Triconstant") 
@@ -83,6 +95,20 @@
 			double neff = ((y0-y3)/(z0-z3))*(x[1]-z0) + y0;
 			values[0] = neff*0.00152132;
 		}
+        else if ( NeffApproach == "AvalancheMode" )
+        {
+            constexpr auto elementary_charge = 1.60217662e-19;    // [ C ]
+            constexpr auto vacuum_permittivity = 8.85418782e-12;  // [ F/m ]
+            constexpr auto relative_permittivity_silicon = 11.9;  // no unit.
+            constexpr auto permittivity = vacuum_permittivity * relative_permittivity_silicon;  // [ F/m ]
+            auto poisson_term =  ((std::signbit(_f_poisson)== false) ? +1.0 : -1.0) * ( elementary_charge * _peak_height * 1e6 / permittivity );  // [ V/m/m ]
+            auto poisson_term_unit_microm = poisson_term * 1e-12;  // [ V/um/um ]
+            
+            auto gauss_term = poisson_term_unit_microm * std::exp(- std::pow((_peak_position - x[1]), 2.0)/(2*std::pow(_gauss_sigma, 2.0))) ;
+            auto base_term = _f_poisson ;
+            
+            values[0] = base_term + gauss_term;
+        }
 		else 
 		{
 			/*
@@ -112,12 +138,26 @@
 
 	}
 
-	
+    std::string get_NeffApproach() const
+    {
+        return NeffApproach;
+    }        
 	void set_NeffApproach(std::string Neff_type)
 	{
 		NeffApproach = Neff_type;
 	}
 
+    void set_avalanche_doping_param( const std::array<double, 3>& param )
+    {
+        _peak_height    = param[0];
+        _peak_position = param[1];
+        _gauss_sigma  = param[2];
+    }
+    void set_bulk_doping_param( const double& param )
+    {
+        _f_poisson = param;
+    }
+    
 	void set_y0(double newValue)
 	{
 		y0 = newValue;

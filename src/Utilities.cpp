@@ -60,6 +60,40 @@ TH2D utilities::export_mod_to_histogram(Function &func, TString hist_name, TStri
 	return hist;
 }
 
+TH1D utilities::export_1D_histogram(Function &func, TString hist_name, TString hist_title, int n_bins_x , double x_min, double x_max, int n_bins_y , double y_min, double y_max)
+{
+
+	double x_value;
+	double y_value;
+	Function * e_f_grad = &func;
+	double e_field_mod;
+	double e_f_x;
+	double e_f_y;
+
+
+	double step_x = (x_max -x_min)/n_bins_x;
+	double step_y = (y_max -y_min)/n_bins_y;
+	TH1D hist = TH1D(hist_name,hist_title, n_bins_y , y_min-0.5*step_y, y_max+0.5*step_y);
+
+	double xval , yval ;
+	for (int x=1; x<=n_bins_x; x++) {
+		xval=x_min+(x-1)*step_x;
+		for (int y=1; y<=n_bins_y; y++) {
+			yval=y_min+(y-1)*step_y;
+			e_f_x = ((*e_f_grad)[0])(xval , yval);
+			e_f_y = ((*e_f_grad)[1])(xval , yval);
+			e_field_mod = sqrt(e_f_x*e_f_x +  e_f_y *e_f_y);
+
+            // if it is center of X-axis
+            if( x == static_cast<int>( n_bins_x/2.0 ) )
+            {
+                hist.SetBinContent( n_bins_y-y+1, e_f_y);
+            }
+		}
+	}
+	return hist;
+}
+
 
 
 
@@ -324,9 +358,11 @@ std::string utilities::vector_to_string(std::vector<double> input_list)
 // Utility to read values for the simulation so main need not be compiled everytime
 // one wishes to modify the simulation parameters
 void utilities::parse_config_file(std::string fileName, double &depth, double &width, double &pitch, int &nns, double &temp, double &trapping, double &fluence,
-		int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type, int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
-		double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
-		std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/)
+                                  int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type,
+                                  std::string& set_avalanche_flag, double& doping_peakheight, double& doping_peakpos, double& doping_gauss_sigma, double& max_multiplication_factor,  // for avalanche region
+                                  int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
+                                  double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
+                                  std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/)
 {
 	// Creat map to hold all values as strings 
 	std::map< std::string, std::string> valuesMap;
@@ -445,6 +481,44 @@ void utilities::parse_config_file(std::string fileName, double &depth, double &w
 		converter.str("");
 		tempString = std::string("");
 
+        // For avalanche region
+		tempString = std::string("SetAvalanche");
+		converter << valuesMap[tempString];
+		converter >> set_avalanche_flag;
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_PeakHeight");
+		converter << valuesMap[tempString];
+		converter >> doping_peakheight;
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_PeakPosition");
+		converter << valuesMap[tempString];
+		converter >> doping_peakpos;
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_GaussSigma");
+		converter << valuesMap[tempString];
+		converter >> doping_gauss_sigma;
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("MaxMultiplicationRatio");
+		converter << valuesMap[tempString];
+		converter >> max_multiplication_factor;
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");        
+        
+        //
+        
 		tempString = std::string("Lambda");
 		converter << valuesMap[tempString];
 		converter >> waveLength;
