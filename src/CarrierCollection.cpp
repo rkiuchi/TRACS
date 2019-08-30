@@ -143,9 +143,7 @@ void CarrierCollection::simulate_drift( double dt, double max_time, double shift
     auto generated_n_carrier = 0;
         
     while( continue_loop && loop < 20 )
-    {
-        std::cout << "curr hole size = " << curr_hole.size() << std::endl;
-        
+    {        
         // clear the list 
         gen_carrier_list.clear();
         

@@ -260,6 +260,7 @@ public:
 	void resize_array();
 	void write_to_file(int tid = 0);
 	void fields_hist_to_file(int, int);
+    void currents_hist_to_file(int tid, int vpos, int nscan);
 	void set_neffType(std::string newParametrization);
 	void set_carrierFile(std::string newCarrFile);
 	void set_vItotals(double);

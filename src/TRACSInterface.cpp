@@ -85,8 +85,6 @@ TRACSInterface::TRACSInterface(std::string filename, const std::string& carrFile
 	detector = new SMSDetector(pitch, width, depth, nns, bulk_type, implant_type, _set_avalanche_flag, _doping_param,
                                n_cells_x, n_cells_y, temp, trapping, fluence, neff_param, neffType, diffusion, dt);    
 	guard.unlock();
-
-	std::cout << "Carrier File = " << carrierFile << std::endl;
 	
 	carrierCollection = new CarrierCollection(detector);
 	carrierCollection->add_carriers_from_file(carrierFile, scanType, depth);
@@ -603,6 +601,9 @@ void TRACSInterface::loop_on(int tid)
 				GetItRc();
 				vSemiItotals[index_total] = i_shaped;
 
+                // Save current distribution 
+                currents_hist_to_file(tid, index_volt, index_zscan);
+                
 				index_total++;
 				i_total = 0 ; i_elec = 0; i_hole = 0; i_shaped = 0; i_temp = 0;
                 i_gen_elec = 0; i_gen_hole = 0;
@@ -637,64 +638,15 @@ void TRACSInterface::loop_on(int tid)
 				GetItRc();
 				vSemiItotals[index_total] = i_shaped;
 
-                //########## Save Current histograms at this point   ##########
-                bool hist_save_flag = true;
-
-                if( hist_save_flag )
-                {
-                    TString file_name;
-                    file_name.Form("current_%dV", (int)( voltVector[index_volt] ) );
-                    TFile *f = new TFile(file_name, "RECREATE");
-
-                    TH1D *h_i_total = new TH1D("i_total", "total current", n_tSteps, 0.0, max_time);
-                    TH1D *h_i_init_elec = new TH1D("i_init_elec", "current induced by initial electron", n_tSteps, 0.0, max_time);
-                    TH1D *h_i_init_hole = new TH1D("i_init_hole", "current induced by initial hole", n_tSteps, 0.0, max_time);
-                    TH1D *h_i_gen_elec = new TH1D("i_gen_elec", "current induced by secondary electron", n_tSteps, 0.0, max_time);
-                    TH1D *h_i_gen_hole = new TH1D("i_gen_hole", "current induced by secondary hole", n_tSteps, 0.0, max_time);     
-
-                    std::valarray<double> i_total_shaped;
-                    std::valarray<double> i_init_elec_shaped;
-                    std::valarray<double> i_init_hole_shaped;
-                    std::valarray<double> i_gen_elec_shaped;
-                    std::valarray<double> i_gen_hole_shaped;                    
-                    
-                    i_total_shaped.resize( static_cast<size_t>(n_tSteps) );
-                    i_init_elec_shaped.resize( static_cast<size_t>(n_tSteps) );
-                    i_init_hole_shaped.resize( static_cast<size_t>(n_tSteps) );
-                    i_gen_elec_shaped.resize( static_cast<size_t>(n_tSteps) );
-                    i_gen_hole_shaped.resize( static_cast<size_t>(n_tSteps) );                    
-                    
-                    GetItRc( i_total_shaped, i_total );
-                    GetItRc( i_init_elec_shaped, i_elec );
-                    GetItRc( i_init_hole_shaped, i_hole );
-                    GetItRc( i_gen_elec_shaped, i_gen_elec );
-                    GetItRc( i_gen_hole_shaped, i_gen_hole );                                                            
-                    
-                    for( int bin_index=0; bin_index < n_tSteps ;  bin_index++)
-                    {
-                        h_i_total->SetBinContent( bin_index+1, i_total_shaped[bin_index] );
-                        h_i_init_elec->SetBinContent( bin_index+1, i_init_elec_shaped[bin_index] );
-                        h_i_init_hole->SetBinContent( bin_index+1, i_init_hole_shaped[bin_index] );
-                        h_i_gen_elec->SetBinContent( bin_index+1, i_gen_elec_shaped[bin_index] );
-                        h_i_gen_hole->SetBinContent( bin_index+1, i_gen_hole_shaped[bin_index] );                                                 
-                    }
-
-                    h_i_total->Write();
-                    h_i_init_elec->Write();
-                    h_i_init_hole->Write();
-                    h_i_gen_elec->Write();
-                    h_i_gen_hole->Write();
-                    
-                    f->Close();                     
-                }
-                //###########################################
-                
+                // Save current distribution 
+                currents_hist_to_file(tid, index_volt, index_yscan);
+                                
 				index_total++;
 				i_total = 0 ; i_elec = 0; i_hole = 0; i_shaped = 0; i_temp = 0;
                 i_gen_elec = 0; i_gen_hole = 0;
 			}
 
-			if (tid == 0) fields_hist_to_file(tid, index_volt);
+			if (tid == 0)fields_hist_to_file(tid, index_volt);
 		}
 
 	}
@@ -785,6 +737,56 @@ void TRACSInterface::write_to_file(int tid)
 
 
 }
+
+void TRACSInterface::currents_hist_to_file(int tid, int vPos, int nscan)
+{
+    TString file_name;
+    file_name.Form("current%dV_scan%d", (int)( voltVector[vPos] ) , nscan);
+    TFile *fout = new TFile(file_name, "RECREATE");
+    
+    TH1D *h_i_total = new TH1D("i_total", "total current", n_tSteps, 0.0, max_time);
+    TH1D *h_i_init_elec = new TH1D("i_init_elec", "current induced by initial electron", n_tSteps, 0.0, max_time);
+    TH1D *h_i_init_hole = new TH1D("i_init_hole", "current induced by initial hole", n_tSteps, 0.0, max_time);
+    TH1D *h_i_gen_elec = new TH1D("i_gen_elec", "current induced by secondary electron", n_tSteps, 0.0, max_time);
+    TH1D *h_i_gen_hole = new TH1D("i_gen_hole", "current induced by secondary hole", n_tSteps, 0.0, max_time);     
+    
+    std::valarray<double> i_total_shaped;
+    std::valarray<double> i_init_elec_shaped;
+    std::valarray<double> i_init_hole_shaped;
+    std::valarray<double> i_gen_elec_shaped;
+    std::valarray<double> i_gen_hole_shaped;                    
+    
+    i_total_shaped.resize( static_cast<size_t>(n_tSteps) );
+    i_init_elec_shaped.resize( static_cast<size_t>(n_tSteps) );
+    i_init_hole_shaped.resize( static_cast<size_t>(n_tSteps) );
+    i_gen_elec_shaped.resize( static_cast<size_t>(n_tSteps) );
+    i_gen_hole_shaped.resize( static_cast<size_t>(n_tSteps) );                    
+
+    // Using defalt RC shaping. May need to consider in future, which signal transformation is suitable.  
+    GetItRc( i_total_shaped, i_total );
+    GetItRc( i_init_elec_shaped, i_elec );
+    GetItRc( i_init_hole_shaped, i_hole );
+    GetItRc( i_gen_elec_shaped, i_gen_elec );
+    GetItRc( i_gen_hole_shaped, i_gen_hole );                                                            
+    
+    for( int bin_index=0; bin_index < n_tSteps ;  bin_index++)
+    {
+        h_i_total->SetBinContent( bin_index+1, i_total_shaped[bin_index] );
+        h_i_init_elec->SetBinContent( bin_index+1, i_init_elec_shaped[bin_index] );
+        h_i_init_hole->SetBinContent( bin_index+1, i_init_hole_shaped[bin_index] );
+        h_i_gen_elec->SetBinContent( bin_index+1, i_gen_elec_shaped[bin_index] );
+        h_i_gen_hole->SetBinContent( bin_index+1, i_gen_hole_shaped[bin_index] );                                                 
+    }
+    
+    h_i_total->Write();
+    h_i_init_elec->Write();
+    h_i_init_hole->Write();
+    h_i_gen_elec->Write();
+    h_i_gen_hole->Write();
+    
+    fout->Close();                     
+}
+
 
 void TRACSInterface::fields_hist_to_file(int tid, int vPos)
 {
