@@ -14,6 +14,14 @@
 #include <cmath>
 #include <array>
 
+#include <TH1D.h>
+#include <TFile.h>
+
+#include <dolfin.h>
+
+using namespace dolfin;
+
+
 /*
  * SOURCE TERM
  *
@@ -25,6 +33,7 @@
  class Source : public Expression
  {
  public:
+
 
 	 //Declaration and default values. They will taken from steering file.
 	// Concentration in transition and extremal points
@@ -40,103 +49,8 @@
 	double z3 = 300.;
 	std::string NeffApproach = "Triconstant";
 
-
-    // For LGAD : Base of the effective doping level
-    double _lgad_bulk_base_neff;
-    double _coeff_gauss;
-
-    double _peak_height;
-    double _peak_position;
-    double _gauss_sigma;
-    double _f_poisson;
     
-    
-	void eval(Array<double>& values, const Array<double>& x) const
-	{
-		if (NeffApproach == "Triconstant") 
-		{
-			/*
-			 * 3 ZONE constant space distribution
-			 *
-			 * We define here a Neff distribution consisting in 3 different zones
-			 * each zone is defined as a constant within the given region.
-			 * It uses all but the last parameter (y3 = Neff(z3)). It takes zX 
-			 * values as boundaries of the zones and the three first yX as the 
-			 * value of Neff in each region
-			 *
-			 * Even though a function like this is generally not continuous, we 
-			 * add the hyperbolic tangent bridges to ensure not only continuity 
-			 * but also derivability.
-			 *
-			 */
-			double neff_1 = y0;
-			double neff_2 = y1;
-			double neff_3 = y2;
-
-			// For continuity and smoothness purposes
-			double bridge_1 = tanh(1000*(x[1]-z0)) - tanh(1000*(x[1]-z1));
-			double bridge_2 = tanh(1000*(x[1]-z1)) - tanh(1000*(x[1]-z2));
-			double bridge_3 = tanh(1000*(x[1]-z2)) - tanh(1000*(x[1]-z3));
-
-			double neff = 0.5*((neff_1*bridge_1)+(neff_2*bridge_2)+(neff_3*bridge_3));
-			values[0] = neff*0.00152132;
-		}
-		else if (NeffApproach == "Linear") 
-		{
-			/*
-			 * 1 ZONE approximatin
-			 *
-			 * First aproximation to the after-irradiation space charge distribution
-			 * Consists on a simple straight line defined by the points (z0, y0) and 
-			 * (z3, y3) and neglects the rest of the values.
-			 *
-			 */
-
-			double neff = ((y0-y3)/(z0-z3))*(x[1]-z0) + y0;
-			values[0] = neff*0.00152132;
-		}
-        else if ( NeffApproach == "AvalancheMode" )
-        {
-            constexpr auto elementary_charge = 1.60217662e-19;    // [ C ]
-            constexpr auto vacuum_permittivity = 8.85418782e-12;  // [ F/m ]
-            constexpr auto relative_permittivity_silicon = 11.9;  // no unit.
-            constexpr auto permittivity = vacuum_permittivity * relative_permittivity_silicon;  // [ F/m ]
-            auto poisson_term =  ((std::signbit(_f_poisson)== false) ? +1.0 : -1.0) * ( elementary_charge * _peak_height * 1e6 / permittivity );  // [ V/m/m ]
-            auto poisson_term_unit_microm = poisson_term * 1e-12;  // [ V/um/um ]
-            
-            auto gauss_term = poisson_term_unit_microm * std::exp(- std::pow((_peak_position - x[1]), 2.0)/(2*std::pow(_gauss_sigma, 2.0))) ;
-            auto base_term = _f_poisson ;
-            
-            values[0] = base_term + gauss_term;
-        }
-		else 
-		{
-			/*
-			 * 3 ZONE space distribution
-			 *
-			 * It consists in 3 different straight lines corresponding to 3 different
-			 * charge distributions. It uses all 8 parameters to compute the Neff.
-			 *
-			 * Continuity is assumed as straight lines have common points, continuity 
-			 * is ensured by the hyperbolic tangent bridges
-			 */
-			double neff_1 = ((y0-y1)/(z0-z1))*(x[1]-z0) + y0;
-			double neff_2 = ((y1-y2)/(z1-z2))*(x[1]-z1) + y1;
-			double neff_3 = ((y2-y3)/(z2-z3))*(x[1]-z2) + y2;
-
-			// For continuity and smoothness purposes
-			double bridge_1 = tanh(1000*(x[1]-z0)) - tanh(1000*(x[1]-z1));
-			double bridge_2 = tanh(1000*(x[1]-z1)) - tanh(1000*(x[1]-z2));
-			double bridge_3 = tanh(1000*(x[1]-z2)) - tanh(1000*(x[1]-z3));
-
-			double neff = 0.5*((neff_1*bridge_1)+(neff_2*bridge_2)+(neff_3*bridge_3));
-			values[0] = neff*0.00152132;
-
-		}
-		// Fix units from the PdC version
-
-
-	}
+	void eval(Array<double>& values, const Array<double>& x) const;
 
     std::string get_NeffApproach() const
     {
@@ -198,4 +112,20 @@
 		z3 = newValue;
 	}
 
+    void save_Neff_dist(double ymin, double ymax);
+        
+private:
+
+    // For the effective doping parameters
+    double _peak_height;
+    double _peak_position;
+    double _gauss_sigma;
+    double _f_poisson;
+
+    static const double _elementary_charge;
+    static const double _vacuum_permittivity;
+    static const double _relative_permittivity_silicon; 
+    
  };
+
+ 

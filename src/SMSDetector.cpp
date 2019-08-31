@@ -199,11 +199,14 @@ void SMSDetector::solve_d_u()
             f.set_avalanche_doping_param( _doping_param );
             f.set_bulk_doping_param( _f_poisson );
 
+            // Save Neff distribution into a ROOT file. Now, it is only 1D histo.
+            f.save_Neff_dist(_y_min, _y_max);
+            
             _L_p.f = f;
         }
         else 
         {
-            _L_p.f = fpois;   
+            _L_p.f = fpois;   // original in TRACS V1.0
         }
         //std::cout << "NeffApproch = " << f.get_NeffApproach() << std::endl;
        
