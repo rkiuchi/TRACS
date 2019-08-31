@@ -62,13 +62,11 @@ PRINT = @echo -e "\e[1;34mBuilding $<\e[0m"
 
 # define the C source files
 SDIR = src/
-SRCS = $(SDIR)TRACSFit.cpp $(SDIR)CarrierCollection.cpp $(SDIR)Carrier.cpp $(SDIR)CarrierMobility.cpp $(SDIR)CarrierTransport.cpp  $(SDIR)Global.cpp $(SDIR)SMSDetector.cpp $(SDIR)SMSDSubDomains.cpp $(SDIR)Threading.cpp $(SDIR)TRACSInterface.cpp $(SDIR)H1DConvolution.C $(SDIR)Utilities.cpp $(SDIR)TMeas.cpp $(SDIR)TWaveform.cpp $(DIR)TMeasHeader.cpp
+SRCS = $(SDIR)TRACSFit.cpp $(SDIR)CarrierCollection.cpp $(SDIR)Carrier.cpp $(SDIR)CarrierMobility.cpp $(SDIR)CarrierTransport.cpp  $(SDIR)Global.cpp $(SDIR)SMSDetector.cpp $(SDIR)SMSDSubDomains.cpp $(SDIR)Source.cpp $(SDIR)Threading.cpp $(SDIR)TRACSInterface.cpp $(SDIR)H1DConvolution.C $(SDIR)Utilities.cpp $(SDIR)TMeas.cpp $(SDIR)TWaveform.cpp $(DIR)TMeasHeader.cpp
 
 ODIR = obj/
-#OBJ_ = TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
-#OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
-OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o 
-OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o
+OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
 #OBJEDGE_ = Edge_tree.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
 OBJEDGE_ = Edge_tree.o
 
@@ -177,6 +175,11 @@ $(ODIR)SMSDSubDomains.o: $(SDIR)SMSDSubDomains.cpp
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)SMSDSubDomains.cpp -o $@
 	@$(BUILD_CMD)
 
+$(ODIR)Source.o: $(SDIR)Source.cpp
+	@$(PRINT)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)Source.cpp -o $@
+	@$(BUILD_CMD)
+
 $(ODIR)Threading.o: $(SDIR)Threading.cpp
 	@$(PRINT)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)Threading.cpp -o $@
@@ -208,7 +211,6 @@ $(ODIR)TMeas.o: $(SDIR)TMeas.cpp
 $(ODIR)TWaveform.o: $(SDIR)TWaveform.cpp
 	$(PRINT)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TWaveform.cpp -o $@
-#	rootcling -f $(SDIR)TWaveDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TWaveform.h
 	rootcling -f $(SDIR)TWaveDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TWaveform.h  $(MYPWD)/include/TWaveform_LinkDef.h
 	$(CC) -shared -fPIC $(CFLAGS) $(INCLUDES) $(SDIR)TWaveDict.C $(SDIR)TWaveform.cpp -o ./lib/libTWaveform.so
 	cp $(SDIR)TWaveDict_rdict.pcm ./lib/
@@ -217,7 +219,6 @@ $(ODIR)TWaveform.o: $(SDIR)TWaveform.cpp
 $(ODIR)TMeasHeader.o: $(SDIR)TMeasHeader.cpp
 	$(PRINT)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(SDIR)TMeasHeader.cpp -o $@
-#	rootcling -f $(SDIR)TMeasHeaderDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeasHeader.h
 	rootcling -f $(SDIR)TMeasHeaderDict.C -c -p -I$(MYPWD)/include/ $(MYPWD)/include/TMeasHeader.h $(MYPWD)/include/TMeasHeader_LinkDef.h
 	$(CC) -shared -fPIC $(CFLAGS) $(INCLUDES) $(SDIR)TMeasHeaderDict.C $(SDIR)TMeasHeader.cpp -o ./lib/libTMeasHeader.so
 	cp $(SDIR)TMeasHeaderDict_rdict.pcm ./lib/
