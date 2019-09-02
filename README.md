@@ -23,16 +23,24 @@ user@cepcvtx:Somewhere/TRACS$ ../../myApp/DoTracsOnly 1 MyConfigTRACS
 
 You can check several distribution in the ROOT files. 
 Notice that those are bi-products during development/debugging procedures, 
-thus could be changed in future. 
+thus could be changed/modified in future. 
 
-- ###### Weighting/Electric fields
-user@cepcvtx:Somewhere/TRACS$ root wf120V  
+- ###### Weighting/Electric fields ("120" is a setting value in the config file and would be different)
+user@cepcvtx:Somewhere/TRACS$ root wf120V   
 root>  h_w_u->Draw();          // Weighting potential  
 root>  h_w_f_grad->Draw();     // Weighting field  
 root>  h_d_f_grad->Draw();     // E-field  
 root>  h_d_f_grad_Y->Draw();   // E-field along with Z-axis  
   
-  
+- ###### Transient Current  ("120" is a setting value in the config file and would be different)   
+user@cepcvtx:Somewhere/TRACS$ root current120V_scan0    
+root>  i_total->Draw();          // Total current    
+root>  i_init_elec->Draw();      // Contribution from initial electrons     
+root>  i_init_hole->Draw();      // Contribution from initial holes    
+root>  i_gen_elec->Draw();       // Contribution from secondary electrons    
+root>  i_gen_hole->Draw();       // Contribution from secondary holes    
+
+
 ### 4b. (Optional) "Edge_tree" . -- after successfully run "DoTracsOnly" .   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
 user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
