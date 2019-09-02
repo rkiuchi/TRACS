@@ -19,7 +19,19 @@ user@cepcvtx:Somewhere/TRACS$ make
 user@cepcvtx:Somewhere/TRACS$ cd ./run/template.IR_Bottom.20190901/   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/DoTracsOnly 1 MyConfigTRACS  
 
-### 4b. (Optional) -- after successfully run "DoTracsOnly" .   
+### 4a. (Optional) Output root files. -- after successfully run "DoTracsOnly"  . 
+
+You can check several distribution in the ROOT files. 
+Notice that those are bi-products during development/debugging procedures, 
+thus could be changed in future. 
+
+user@cepcvtx:Somewhere/TRACS$ root wf120V
+root>  h_w_u->Draw();          // Weighting potential
+root>  h_w_f_grad->Draw();     // Weighting field
+root>  h_d_f_grad->Draw();     // E-field
+root>  h_d_f_grad_Y->Draw();   // E-field along with Z-axis
+
+### 4b. (Optional) "Edge_tree" . -- after successfully run "DoTracsOnly" .   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
 user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
   
@@ -51,7 +63,7 @@ In addion to above, the effective doping level in the bulk except the "gain laye
 This is determined from the detector thickness and the full depletion voltage, which is already used in the original TRACS.
 Therefore, you need to set the full depletion voltage correctly. ( In fact, the impact ionization effect happens only 
 at the high doping area, and less effect if one sets the full depletion voltage == nominal doping level wrongly )   
-One of point is that the full depletion voltage is that without the "gain layer", to estimate normal doping level correctly.
+One of point is that this full depletion voltage is that one without the "gain layer", to estimate normal doping level correctly.
 - ###### DepletionVoltage = 10.0 # in volts   
 
 
