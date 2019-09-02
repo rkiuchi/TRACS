@@ -25,9 +25,7 @@ user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20
   
 root> .x loadlib.c  
 root> edge->StartViewer();  
-
 or   
-
 root> TBrowser a;  
 
 
