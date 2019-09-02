@@ -200,8 +200,7 @@ TransferFunction = NO_TF
 # more accurate the simulation will be; on the other hand, the coarser 
 # the time step, the faster the simulation will finish
 
-#TimeStep = 1.e-12   # in seconds
-TimeStep = 5.e-13   # in seconds 
+TimeStep = 1.e-12   # in seconds
 
 # Time elapsed from the start to the end of the simulation. As long as 
 # the whole signal is collected before the end of the simulation it has 
