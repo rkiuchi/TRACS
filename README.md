@@ -13,7 +13,7 @@ user@cepcvtx:~$ cd {some directory under which you want to setup the code = Some
 user@cepcvtx:Somewhere$ git clone https://github.com/rkiuchi/TRACS  
 user@cepcvtx:Somewhere$ cd TRACS   
 
-- ###### Necessary libraries, FEniCS, ROOT, Eigen, QT4, are assummed to be already installed.   
+- ###### Necessary libraries, such as FEniCS, ROOT, Eigen, QT4, are assummed to be already installed if we want to run TRACS at the other PC circumstances.   
 
 ### 2. Setup
 user@cepcvtx:Somewhere/TRACS$ ./setup.sh
