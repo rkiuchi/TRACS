@@ -193,7 +193,7 @@ void SMSDetector::solve_d_u()
 	{
         if ( _avalanche_flag == "yes" )
         {
-            std::cout << "Avalanche mechanism ON " << std::endl;
+            std::cout << "Avalanche layer is inserted " << std::endl;
 
             f.set_NeffApproach("AvalancheMode");
             f.set_avalanche_doping_param( _doping_param );
@@ -206,6 +206,16 @@ void SMSDetector::solve_d_u()
         }
         else 
         {
+            std::cout << "Avalanche layer is not set " << std::endl;
+            
+            // Setting for "save_Neff_dist"  function 
+            std::array<double, 3> doping_param_null{ {0.0, 0.0, 0.001} };
+            f.set_avalanche_doping_param( doping_param_null );
+            f.set_bulk_doping_param( _f_poisson );            
+
+            // Save Neff distribution into a ROOT file. Now, it is only 1D histo.
+            f.save_Neff_dist(_y_min, _y_max);            
+            
             _L_p.f = fpois;   // original in TRACS V1.0
         }
         //std::cout << "NeffApproch = " << f.get_NeffApproach() << std::endl;
