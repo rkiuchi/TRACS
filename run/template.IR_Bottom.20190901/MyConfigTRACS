@@ -132,7 +132,7 @@ DopingProfile_PeakPosition = 1.5          # Z (vertical) position from the top. 
 DopingProfile_GaussSigma  = 0.3           # unit in micron-meter
 
 #  Maximum number of charge multiplication factor.
-#  This factor is the ratio between the total carriers including newly generated
+#  This factor is the ratio between the total carriers newly generated
 #  and the initial carriers, recorded in the carrier file.
 #  (current) Program will escape from the avalanche loop, if the ratio exceeds this number.
 
