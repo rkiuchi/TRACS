@@ -7,8 +7,8 @@ One important policy with this work (so far) is that minimizing the change as mu
 though re-arrangement of the code structure could fit more in future development.
 
 ### 1. Install
-user@mylocal:---$ ssh -X cepcvtx.ihep.ac.cn  
-  
+login to cepcvtx.    
+    
 user@cepcvtx:~$ cd {some directory under which you want to setup the code = Somewhere}  
 user@cepcvtx:Somewhere$ git clone https://github.com/rkiuchi/TRACS  
 user@cepcvtx:Somewhere$ cd TRACS   
