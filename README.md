@@ -7,8 +7,8 @@
 > make
 
 ### 3. Run Template 
-> cd ./run/template.IR_Bottom.20190901/
-> ../../myApp/DoTracsOnly 1 MyConfigTRACS
+> cd ./run/template.IR_Bottom.20190901/   
+> ../../myApp/DoTracsOnly 1 MyConfigTRACS  
 
 (Optional) -- after run "DoTracsOnly" .   
 The file name "NOirrad...." differs reflecting the setting parameters in "MyConfigTRACS"   
