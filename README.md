@@ -25,7 +25,7 @@ You can check several distribution in the ROOT files.
 Notice that those are bi-products during development/debugging procedures, 
 thus could be changed in future. 
 
-user@cepcvtx:Somewhere/TRACS$ root wf120V
+user@cepcvtx:Somewhere/TRACS$ root wf120V  
 root>  h_w_u->Draw();          // Weighting potential  
 root>  h_w_f_grad->Draw();     // Weighting field  
 root>  h_d_f_grad->Draw();     // E-field  
