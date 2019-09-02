@@ -20,7 +20,7 @@ user@cepcvtx:Somewhere/TRACS$ cd ./run/template.IR_Bottom.20190901/
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/DoTracsOnly 1 MyConfigTRACS  
 
 ### 4b. (Optional) -- after successfully run "DoTracsOnly" .   
-user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree   NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
+user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
 user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
   
 root> .x loadlib.c  
@@ -30,6 +30,7 @@ or
 
 root> TBrowser a;  
 
+***
 - The file name "NOirrad...." differs reflecting the setting parameters in "MyConfigTRACS"   
 - The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
 
