@@ -30,9 +30,9 @@ or
 
 root> TBrowser a;  
 
-***
-- The file name "NOirrad...." differs reflecting the setting parameters in "MyConfigTRACS"   
-- The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
+
+- ###### The file name "NOirrad...." differs reflecting the setting parameters in "MyConfigTRACS"   
+- ###### The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
 
 ### 5. Config File
   
