@@ -1,8 +1,8 @@
 # TRACS
 
 ### Note
-Add the avalanche feature in the TRACS found at https://github.com/CERN-SSD/TRACS .
-The purpose is to simulate so-called LGAD, which has "gain layer" beneath the charge collection electrodes. 
+Add the avalanche feature in the TRACS found at https://github.com/CERN-SSD/TRACS .   
+The purpose of this development is to simulate so-called LGAD, which has "gain layer" beneath the charge collection electrodes. 
 
 ### 1. Install
 user@mylocal:---$ ssh -X cepcvtx.ihep.ac.cn  
