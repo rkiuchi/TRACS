@@ -39,8 +39,18 @@ root>  i_init_elec->Draw();      // Contribution from initial electrons
 root>  i_init_hole->Draw();      // Contribution from initial holes    
 root>  i_gen_elec->Draw();       // Contribution from secondary electrons    
 root>  i_gen_hole->Draw();       // Contribution from secondary holes    
-
-
+  
+    
+- ###### Timing information. Generation time of carriers.      
+user@cepcvtx:Somewhere/TRACS$ root ncarrier.root    
+root>  e_gentime->Draw();          // Generation time of all of electrons   
+root>  h_gentime->Draw();          // Generation time of all of holes   
+   
+- ###### Effective Doping Profile along with detector vertical direction.   
+user@cepcvtx:Somewhere/TRACS$ root Neff_dist.root    
+root>  neff_dist->Draw();          // Effective doping profile  
+  
+   
 ### 4b. (Optional) "Edge_tree" . -- after successfully run "DoTracsOnly" .   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
 user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
@@ -55,7 +65,7 @@ root> TBrowser a;
 - ###### The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
 
 ### 5. Config File
-Here, newly introduced parameters in the config file ("MyConfigTRACS" in the template) are described.  
+Here, newly introduced parameters in the config file ("MyConfigTRACS" in the template) are mainly described.  
 
 - ###### SetAvalanche = yes   # yes: set this doping profile.  no: turn-off, even though parameters are given bellow.  
 
