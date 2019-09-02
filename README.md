@@ -25,12 +25,14 @@ You can check several distribution in the ROOT files.
 Notice that those are bi-products during development/debugging procedures, 
 thus could be changed in future. 
 
+- ###### Weighting/Electric fields
 user@cepcvtx:Somewhere/TRACS$ root wf120V  
 root>  h_w_u->Draw();          // Weighting potential  
 root>  h_w_f_grad->Draw();     // Weighting field  
 root>  h_d_f_grad->Draw();     // E-field  
 root>  h_d_f_grad_Y->Draw();   // E-field along with Z-axis  
-
+  
+  
 ### 4b. (Optional) "Edge_tree" . -- after successfully run "DoTracsOnly" .   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/Edge_tree NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct  
 user@cepcvtx:Somewhere/TRACS$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
