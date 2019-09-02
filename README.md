@@ -25,7 +25,7 @@ user@cepcvtx:Somewhere/TRACS$ make
 user@cepcvtx:Somewhere/TRACS$ cd ./run/template.IR_Bottom.20190901/   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/DoTracsOnly 1 MyConfigTRACS  
 
-- ###### Note that the above "DoTracsOnly" executable requests the form of DoTracsOnly "number of threads" "config file". However, number of threads == 1, is assumed for this version, ( the original code as well ) and no gurantee if we try to run with more than one thread.
+- ###### Note that the above "DoTracsOnly" executable requests the form as "DoTracsOnly [number of threads] [config file]". However, number of threads == 1, is assumed for this version, ( the original code as well ) and no gurantee if we try to run with more than one thread.
 
 ### 4a. (Optional) Output root files. -- after successfully run "DoTracsOnly"  . 
 
