@@ -23,7 +23,7 @@
   
 The file name "NOirrad...." differs reflecting the setting parameters in "MyConfigTRACS"   
 
-user@cepcvtx: root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
+user@cepcvtx:Some-TRACS-Dir$ root NOirrad_dt0ps_4pF_tNOtrappingns_dz5um_dy5dV20V_0nns_bottom_0_rc.hetct.root  
   
 root> .x loadlib.c  
 root> edge->StartViewer();  
