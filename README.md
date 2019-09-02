@@ -33,7 +33,7 @@ root> TBrowser a;
 - ###### The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
 
 ### 5. Config File
-- ###### Here, newly introduced parameters in the config file ("MyConfigTRACS" in the template) are described.  
+Here, newly introduced parameters in the config file ("MyConfigTRACS" in the template) are described.  
 
 - ###### SetAvalanche = yes   # yes: set this doping profile.  no: turn-off, even though parameters are given bellow.  
 
@@ -46,6 +46,13 @@ The (carrier loop)calculation time scales with the number of carriers, including
 Thus, stopping the loop calculation iteration, if the number of generated carriers reaches or exceeds the ratio bellow. The ratio
 is defined as the number between the total number of carriers generated and the number of initial carriers read from a carrier file.  
 - ###### MaxMultiplicationRatio = 10.0         # no unit.   
+
+In addion to above, the effective doping level in the bulk except the "gain layer" is also important.
+This is determined from the detector thickness and the full depletion voltage, which is already used in the original TRACS.
+Therefore, you need to set the full depletion voltage correctly. ( In fact, the impact ionization effect happens only 
+at the high doping area, and less effect if one sets the full depletion voltage == nominal doping level wrongly )   
+One of point is that the full depletion voltage is that without the "gain layer", to estimate normal doping level correctly.
+- ###### DepletionVoltage = 10.0 # in volts   
 
 
 ### ChangeLog (from the original repo.)
