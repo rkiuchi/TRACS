@@ -3,6 +3,8 @@
 ### Note
 Add the avalanche feature in the TRACS found at https://github.com/CERN-SSD/TRACS .   
 The purpose of this development is to simulate so-called LGAD, which has "gain layer" beneath the charge collection electrodes. 
+One important policy with this work (so far) is to minimize the change as mush as possible
+though re-arrangement of the entire code structure can fit more in future.
 
 ### 1. Install
 user@mylocal:---$ ssh -X cepcvtx.ihep.ac.cn  
@@ -22,6 +24,11 @@ user@cepcvtx:Somewhere/TRACS$ make
 ### 4. Run Template 
 user@cepcvtx:Somewhere/TRACS$ cd ./run/template.IR_Bottom.20190901/   
 user@cepcvtx:Somewhere/TRACS$ ../../myApp/DoTracsOnly 1 MyConfigTRACS  
+
+- ###### Note that the above "DoTracsOnly" executable requests the form of   
+DoTracsOnly "number of threads" "config file" . However, number of threads == 1, is assumed 
+for this version, ( the original code as well ) and no gurantee if we try to run with more 
+than one thread.
 
 ### 4a. (Optional) Output root files. -- after successfully run "DoTracsOnly"  . 
 
