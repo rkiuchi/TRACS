@@ -86,6 +86,21 @@ at the high doping area, and less effect if one sets the full depletion voltage 
 One of point is that this full depletion voltage is that one without the "gain layer", to estimate normal doping level correctly.
 - ###### DepletionVoltage = 10.0 # in volts   
 
+The other factor related with the impact ionization effect is the temperature of the detector. Do not forget about its value.  
 
 ### ChangeLog (from the original repo.)
+
+V1.1)  
+- ###### Addition of the impact ionization effect (mainly in Carrier.cpp)      
+- ###### Carrier container is changed so that secondary carriers can be stored as well.      
+- ###### Note that, above treatment might be dangerous because the memory(stack) overflow can be happen.   
+- ###### Introducing the effective doping profile option for the avalanche region.   
+- ######    
+
+### Reference 
+- #### Impact ionization effect  
+
+The model and parameters are taken from :   
+M. Valdinoci, D. Ventura, M. C. Vecchi, M. Rudan, G. Baccarani, F. Illien, A. Stricker, L. Zullino, "Impact-ionization in silicon at large operating temperature", SISPAD '99, Sept. 6-8, 1999, Kyoto, Japan.
+
 
