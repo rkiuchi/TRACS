@@ -33,7 +33,20 @@ root> TBrowser a;
 - ###### The functionality/usage is not fully tested and that's why it is marked as "Optional" now. (09/02/2019)
 
 ### 5. Config File
-- ###### Here, only newly introduced parameters in the config file ("MyConfigTRACS" in the template) are described.  
+- ###### Here, newly introduced parameters in the config file ("MyConfigTRACS" in the template) are described.  
+
+- ### SetAvalanche = yes   # yes: set this doping profile.  no: turn-off, even though parameters are given bellow.  
+
+The shape of "Gain Layer" is now assumed as a simple Gaussian for which we need to specify some parameters:  
+- ### DopingProfile_PeakHeight   = 3.0e16       # unit in  cm^-3  
+- ### DopingProfile_PeakPosition = 1.5          # Z (vertical) position from the top. unit in micron-meter   
+- ### DopingProfile_GaussSigma  = 0.3           # unit in micron-meter  
+
+The (carrier loop)calculation time scales with the number of carriers, including the secondary generated ones due to the Avalanche effect.
+Thus, stopping the loop calculation iteration, if the number of generated carriers reaches or exceeds the ratio bellow. The ratio
+is defined as the number between the total number of carriers generated and the number of initial carriers read from a carrier file.  
+- ### MaxMultiplicationRatio = 10.0         # no unit.   
+
 
 ### ChangeLog (from the original repo.)
 
