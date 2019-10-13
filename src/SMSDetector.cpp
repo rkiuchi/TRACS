@@ -40,7 +40,7 @@
 
 std::mutex mtxD;
 
-SMSDetector::SMSDetector(double pitch, double width, double depth, int nns, char bulk_type, char implant_type, std::string avalanche_flag, std::array<double, 3> doping_param,
+SMSDetector::SMSDetector(double pitch, double width, double depth, int nns, char bulk_type, char implant_type, std::string avalanche_flag, std::array<std::array<double, 3>, 2> doping_param,
                          int n_cells_x, int n_cells_y, double tempK, double trapping,
                          double fluence, std::vector<double> neff_param, std::string neff_type, int diffusion, double dt) :
 
@@ -208,8 +208,12 @@ void SMSDetector::solve_d_u()
         {
             std::cout << "Avalanche layer is not set " << std::endl;
             
-            // Setting for "save_Neff_dist"  function 
-            std::array<double, 3> doping_param_null{ {0.0, 0.0, 0.001} };
+            // Setting for "save_Neff_dist"  function . last parameter (Gaussian sigma) should be >0 
+            std::array<std::array<double, 3>, 2> doping_param_null{
+                {  {0.0, 0.0, 0.001},
+                    {0.0, 0.0, 0.001} }
+            };
+            
             f.set_avalanche_doping_param( doping_param_null );
             f.set_bulk_doping_param( _f_poisson );            
 

@@ -89,13 +89,15 @@ private:
 
     // For avalanche region
     std::string _set_avalanche_flag;
-    double      _doping_peakheight;
-    double      _doping_peakpos;    
-    double      _doping_gauss_sigma;
+    std::array<double, 2>      _doping_peakheight;
+    std::array<double, 2>      _doping_peakpos;    
+    std::array<double, 2>      _doping_gauss_sigma;
     double      _max_multiplication_factor;
-
-    std::array<double, 3>_doping_param;
     
+    std::array<std::array<double, 3>, 2> _doping_param;    // For two Gaussian sets
+
+    std::string _skip_event_loop;
+        
 	int total_crosses;
 	bool underDep;
 

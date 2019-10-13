@@ -61,11 +61,15 @@ using namespace dolfin;
 		NeffApproach = Neff_type;
 	}
 
-    void set_avalanche_doping_param( const std::array<double, 3>& param )
+    void set_avalanche_doping_param( const std::array<std::array<double, 3>, 2>& param )
     {
-        _peak_height    = param[0];
-        _peak_position = param[1];
-        _gauss_sigma  = param[2];
+        _peak_height[0]    = param[0][0];
+        _peak_position[0] = param[0][1];
+        _gauss_sigma[0]  = param[0][2];
+
+        _peak_height[1]    = param[1][0];
+        _peak_position[1] = param[1][1];
+        _gauss_sigma[1]  = param[1][2];
     }
     void set_bulk_doping_param( const double& param )
     {
@@ -117,9 +121,9 @@ using namespace dolfin;
 private:
 
     // For the effective doping parameters
-    double _peak_height;
-    double _peak_position;
-    double _gauss_sigma;
+    std::array<double, 2> _peak_height;
+    std::array<double, 2> _peak_position;
+    std::array<double, 2> _gauss_sigma;
     double _f_poisson;
 
     static const double _elementary_charge;

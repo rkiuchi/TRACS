@@ -39,6 +39,8 @@
 //#include "qcustomplot.h"
 #include <QFile>
 
+#include <array>
+
 using namespace dolfin;
 
 namespace utilities
@@ -59,14 +61,11 @@ namespace utilities
 
 	std::string vector_to_string(std::vector<double> input_list);
 
-//	void parse_config_file(std::string fileName, double &depth, double &width, double &pitch, int &nns, double &temp, double &trapping, double &fluence,
-//			int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type, int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
-//			double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
-//			std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/);
     
     void parse_config_file(std::string fileName, double &depth, double &width, double &pitch, int &nns, double &temp, double &trapping, double &fluence,
-                           int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type,
-                           std::string& set_avalanche_flag,  double& doping_peakheight, double& doping_peakpos, double& doping_gauss_sigma, double& max_multiplication_factor,
+                           int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type, std::string& skip_flag,
+                           std::string& set_avalanche_flag,  std::array<double, 2>& doping_peakheight, std::array<double, 2>& doping_peakpos,
+                           std::array<double, 2>& doping_gauss_sigma, double& max_multiplication_factor,
                            int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
                            double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
                            std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/);

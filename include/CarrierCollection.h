@@ -62,7 +62,7 @@ public:
     void simulate_drift( double dt, double max_time, double shift_x, double shift_y,
                          std::valarray<double> &curr_elec, std::valarray<double> &curr_hole,
                          std::valarray<double> &curr_gen_elec, std::valarray<double> &curr_gen_hole, double max_mul_factor, 
-                         int &totalCrosses, const std::string &scantype);
+                         int &totalCrosses, const std::string &scantype, std::string skip_event_loop);
 
 	TH2D get_e_dist_histogram(int n_bins_x, int n_bins_y, TString hist_name = "e_dist", TString hist_title ="e_dist");
 	TH2D get_e_dist_histogram(int n_bins_x, int n_bins_y, double shift_x, double shift_y, TString hist_name = "e_dist", TString hist_title ="e_dist");

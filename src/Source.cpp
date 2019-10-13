@@ -17,12 +17,13 @@ void Source::save_Neff_dist(double zmin, double zmax)
     {            
         double tmp_z = zmin + (zmax-zmin)/static_cast<double>(nstep) * i;
         
-        auto gauss_term = _peak_height * std::exp(- std::pow((_peak_position - tmp_z), 2.0)/(2*std::pow(_gauss_sigma, 2.0))) ;  // [ /cm^3 ]
+        auto gauss_term1 = _peak_height[0] * std::exp(- std::pow((_peak_position[0] - tmp_z), 2.0)/(2*std::pow(_gauss_sigma[0], 2.0))) ;  // [ /cm^3 ]
+        auto gauss_term2 = _peak_height[1] * std::exp(- std::pow((_peak_position[1] - tmp_z), 2.0)/(2*std::pow(_gauss_sigma[1], 2.0))) ;  // [ /cm^3 ]        
 
         auto permittivity = _vacuum_permittivity * _relative_permittivity_silicon * 1e-2;  // [ F/cm ]        
         auto base_term = ( _f_poisson * 1e4*1e4 ) * permittivity / _elementary_charge ;  // [ /cm^3 ]
 
-        hist.SetBinContent(i+1, std::abs(base_term)+std::abs(gauss_term) );
+        hist.SetBinContent(i+1, std::abs(base_term)+std::abs(gauss_term1)+std::abs(gauss_term2) );
     }
 
     hist.Write();    
@@ -82,13 +83,20 @@ void Source::eval(Array<double>& values, const Array<double>& x) const
          */
         
         auto permittivity = _vacuum_permittivity * _relative_permittivity_silicon;  // [ F/m ]
-        auto poisson_term =  ((std::signbit(_f_poisson)== false) ? +1.0 : -1.0) * ( _elementary_charge * _peak_height * 1e6 / permittivity );  // [ V/m/m ]
-        auto poisson_term_unit_in_microm = poisson_term * 1e-12;  // [ V/um/um ]
         
-        auto gauss_term = poisson_term_unit_in_microm * std::exp(- std::pow((_peak_position - x[1]), 2.0)/(2*std::pow(_gauss_sigma, 2.0))) ;
+        auto poisson_term1 =  ((std::signbit(_f_poisson)== false) ? +1.0 : -1.0) * ( _elementary_charge * _peak_height[0] * 1e6 / permittivity );  // [ V/m/m ]
+        auto poisson_term_unit_in_microm1 = poisson_term1 * 1e-12;  // [ V/um/um ]
+
+        auto poisson_term2 =  ((std::signbit(_f_poisson)== false) ? +1.0 : -1.0) * ( _elementary_charge * _peak_height[1] * 1e6 / permittivity );  // [ V/m/m ]
+        auto poisson_term_unit_in_microm2 = poisson_term2 * 1e-12;  // [ V/um/um ]
+                
+        auto gauss_term1 = poisson_term_unit_in_microm1 * std::exp(- std::pow((_peak_position[0] - x[1]), 2.0)/(2*std::pow(_gauss_sigma[0], 2.0))) ;
+        auto gauss_term2 = poisson_term_unit_in_microm2 * std::exp(- std::pow((_peak_position[1] - x[1]), 2.0)/(2*std::pow(_gauss_sigma[1], 2.0))) ;
+        
+        
         auto base_term = _f_poisson ;  // [ V/um/um ]
         
-        values[0] = base_term + gauss_term;
+        values[0] = base_term + gauss_term1 + gauss_term2;
     }
     else 
     {

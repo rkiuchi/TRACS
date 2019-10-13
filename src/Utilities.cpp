@@ -358,8 +358,9 @@ std::string utilities::vector_to_string(std::vector<double> input_list)
 // Utility to read values for the simulation so main need not be compiled everytime
 // one wishes to modify the simulation parameters
 void utilities::parse_config_file(std::string fileName, double &depth, double &width, double &pitch, int &nns, double &temp, double &trapping, double &fluence,
-                                  int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type,
-                                  std::string& set_avalanche_flag, double& doping_peakheight, double& doping_peakpos, double& doping_gauss_sigma, double& max_multiplication_factor,  // for avalanche region
+                                  int &nThreads, int &n_cells_x, int &n_cells_y, char &bulk_type, char &implant_type, std::string& skip_flag,
+                                  std::string& set_avalanche_flag, std::array<double, 2>& doping_peakheight, std::array<double, 2>& doping_peakpos,  // for avalanche region
+                                  std::array<double, 2>& doping_gauss_sigma, double& max_multiplication_factor,                                                             // for avalanche region
                                   int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
                                   double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
                                   std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/)
@@ -481,6 +482,11 @@ void utilities::parse_config_file(std::string fileName, double &depth, double &w
 		converter.str("");
 		tempString = std::string("");
 
+        
+		tempString = std::string("SkipEventLoop");
+        skip_flag = valuesMap[tempString];
+		tempString = std::string("");        
+
         // For avalanche region
 		tempString = std::string("SetAvalanche");
 		converter << valuesMap[tempString];
@@ -491,24 +497,45 @@ void utilities::parse_config_file(std::string fileName, double &depth, double &w
 
 		tempString = std::string("DopingProfile_PeakHeight");
 		converter << valuesMap[tempString];
-		converter >> doping_peakheight;
+		converter >> doping_peakheight[0];
 		converter.clear();
 		converter.str("");
 		tempString = std::string("");
 
 		tempString = std::string("DopingProfile_PeakPosition");
 		converter << valuesMap[tempString];
-		converter >> doping_peakpos;
+		converter >> doping_peakpos[0];
 		converter.clear();
 		converter.str("");
 		tempString = std::string("");
 
 		tempString = std::string("DopingProfile_GaussSigma");
 		converter << valuesMap[tempString];
-		converter >> doping_gauss_sigma;
+		converter >> doping_gauss_sigma[0];
 		converter.clear();
 		converter.str("");
 		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_PeakHeight2");
+		converter << valuesMap[tempString];
+		converter >> doping_peakheight[1];
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_PeakPosition2");
+		converter << valuesMap[tempString];
+		converter >> doping_peakpos[1];
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");
+
+		tempString = std::string("DopingProfile_GaussSigma2");
+		converter << valuesMap[tempString];
+		converter >> doping_gauss_sigma[1];
+		converter.clear();
+		converter.str("");
+		tempString = std::string("");        
 
 		tempString = std::string("MaxMultiplicationRatio");
 		converter << valuesMap[tempString];

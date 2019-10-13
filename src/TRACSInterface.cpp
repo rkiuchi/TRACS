@@ -41,15 +41,20 @@ TRACSInterface::TRACSInterface(std::string filename, const std::string& carrFile
 	neff_param = std::vector<double>(8,0);
 	total_crosses = 0;
 
-    utilities::parse_config_file(filename, depth, width,  pitch, nns, temp, trapping, fluence, nThreads, n_cells_x, n_cells_y, bulk_type, implant_type,
+    utilities::parse_config_file(filename, depth, width,  pitch, nns, temp, trapping, fluence, nThreads, n_cells_x, n_cells_y, bulk_type, implant_type, _skip_event_loop,
                                  _set_avalanche_flag, _doping_peakheight, _doping_peakpos, _doping_gauss_sigma, _max_multiplication_factor,   // new parameters for avalanche regions
                                  waveLength, scanType, C, dt, max_time, vInit, deltaV, vMax, vDepletion, zInit, zMax, deltaZ, yInit, yMax, deltaY, neff_param, neffType,
                                  tolerance, chiFinal, diffusion, fitNorm/*, gen_time*/);
     
-    // Pack into a structure .  In future, it can be a Structure or Class. 
-    _doping_param[0] = _doping_peakheight;
-    _doping_param[1] = _doping_peakpos;
-    _doping_param[2] = _doping_gauss_sigma;
+    // Pack into a structure .  In future, it can be a Structure or Class.
+    _doping_param[0][0] = _doping_peakheight[0];
+    _doping_param[0][1] = _doping_peakpos[0];
+    _doping_param[0][2] = _doping_gauss_sigma[0];
+
+    _doping_param[1][0] = _doping_peakheight[1];
+    _doping_param[1][1] = _doping_peakpos[1];
+    _doping_param[1][2] = _doping_gauss_sigma[1];
+
     
 	if (fluence == 0) // if no fluence -> no trapping
 	{
@@ -269,7 +274,8 @@ void TRACSInterface::simulate_ramo_current()
 	yPos is later transformed into X.
 	zPos is later transformed into Y.*/
     
-    carrierCollection->simulate_drift( dt, max_time, yPos, zPos, i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType);
+    carrierCollection->simulate_drift( dt, max_time, yPos, zPos, i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType,
+        _skip_event_loop);
     
 	i_total = i_elec + i_hole;
 }
@@ -593,7 +599,8 @@ void TRACSInterface::loop_on(int tid)
 			for (int index_zscan = 0; index_zscan < zVector.size(); index_zscan++){
 
 				//simulate_ramo_current();
-                carrierCollection->simulate_drift( dt, max_time, yInit, zVector[index_zscan], i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType); 
+                carrierCollection->simulate_drift( dt, max_time, yInit, zVector[index_zscan], i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType,
+                                                   _skip_event_loop); 
                 
 				//i_total = i_elec + i_hole;
                 i_total = i_elec + i_hole + i_gen_elec + i_gen_hole;
@@ -630,7 +637,8 @@ void TRACSInterface::loop_on(int tid)
 
 			for (int index_yscan = 0; index_yscan < yVector.size(); index_yscan++){
 
-				carrierCollection->simulate_drift( dt, max_time, yVector[index_yscan], zInit, i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType);
+				carrierCollection->simulate_drift( dt, max_time, yVector[index_yscan], zInit, i_elec, i_hole, i_gen_elec, i_gen_hole, _max_multiplication_factor, total_crosses, scanType,
+                    _skip_event_loop);
                 
 				//i_total = i_elec + i_hole;
                 i_total = i_elec + i_hole + i_gen_elec + i_gen_hole;
