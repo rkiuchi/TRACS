@@ -363,7 +363,7 @@ void utilities::parse_config_file(std::string fileName, double &depth, double &w
                                   std::array<double, 2>& doping_gauss_sigma, double& max_multiplication_factor,                                                             // for avalanche region
                                   int &waveLength, std::string &scanType, double &C, double &dt, double &max_time,
                                   double &v_init, double &deltaV, double &v_max, double &v_depletion, double &zInit, double &zMax, double &deltaZ, double &yInit, double &yMax, double &deltaY,
-                                  std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm/*, double &gen_time*/)
+                                  std::vector<double> &neff_param, std::string &neffType, double &tolerance, double &chiFinal, int &diffusion, double &fitNorm, std::string& simulation_polarity_flag)
 {
 	// Creat map to hold all values as strings 
 	std::map< std::string, std::string> valuesMap;
@@ -741,6 +741,10 @@ void utilities::parse_config_file(std::string fileName, double &depth, double &w
 		converter.str("");
 		tempString = std::string("");
 
+        tempString = std::string("SimulationPolarityInversion");
+        simulation_polarity_flag = valuesMap[tempString];
+		tempString = std::string("");
+        
 		configFile.close();
 	}
 	else

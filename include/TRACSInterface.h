@@ -97,6 +97,10 @@ private:
     std::array<std::array<double, 3>, 2> _doping_param;    // For two Gaussian sets
 
     std::string _skip_event_loop;
+
+    std::string _simulation_polarity_inverse_flag;
+
+    int _after_fitting_process;   // indicating whether the status is before or after fitting procedure. 
         
 	int total_crosses;
 	bool underDep;
@@ -268,8 +272,8 @@ public:
 	void set_vItotals(double);
 	void resetAll();
 
-
-
+    inline void set_fit_status(){ _after_fitting_process = 1; };
+        
 	//ROOT related
 	void DumpToTree( TMeas *em , TTree *tree ) ;
 	void GetTree( TTree * tree ) ;

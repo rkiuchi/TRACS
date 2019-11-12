@@ -65,9 +65,13 @@ SDIR = src/
 SRCS = $(SDIR)TRACSFit.cpp $(SDIR)CarrierCollection.cpp $(SDIR)Carrier.cpp $(SDIR)CarrierMobility.cpp $(SDIR)CarrierTransport.cpp  $(SDIR)Global.cpp $(SDIR)SMSDetector.cpp $(SDIR)SMSDSubDomains.cpp $(SDIR)Source.cpp $(SDIR)Threading.cpp $(SDIR)TRACSInterface.cpp $(SDIR)H1DConvolution.C $(SDIR)Utilities.cpp $(SDIR)TMeas.cpp $(SDIR)TWaveform.cpp $(DIR)TMeasHeader.cpp
 
 ODIR = obj/
-OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o 
-OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
+OBJB_ = DoTracsOnly.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o
+
+OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o
+
 OBJEDGE_ = Edge_tree.o TMeas.o TWaveform.o TMeasHeader.o
+
+#OBJC_ = MfgTRACSFit.o TRACSFit.o CarrierCollection.o Carrier.o CarrierMobility.o CarrierTransport.o Global.o SMSDetector.o SMSDSubDomains.o Source.o Threading.o TRACSInterface.o H1DConvolution.o Utilities.o TMeas.o TWaveform.o TMeasHeader.o TMeasDict.o TMeasHeaderDict.o TWaveDict.o
 
 OBJ := $(patsubst %,$(ODIR)%,$(OBJ_))
 OBJB := $(patsubst %,$(ODIR)%,$(OBJB_))
