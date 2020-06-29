@@ -145,7 +145,7 @@ void CarrierCollection::simulate_drift( double dt, double max_time, double shift
         std::cout << std::endl;
         
         continue_loop = false;
-    }
+    }    
     int loop = 0;
     
     //auto initial_n_carrier = (*itr_queue).size();
@@ -158,7 +158,7 @@ void CarrierCollection::simulate_drift( double dt, double max_time, double shift
         // Declare the iterator and increment it here to avoid the invalidation of the iterator.
         // Probably, it is fine, as long as std::deque with "puch_back" insertion method, thus it is kinds of safety reason.
         auto itr_queue = _queue_carrier_list.begin();
-        auto initial_n_carrier = (*itr_queue).size();
+        auto initial_n_carrier = (*itr_queue).size();        
         for( int i=0; i<loop; i++)
         {
             ++itr_queue;

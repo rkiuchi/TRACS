@@ -96,6 +96,11 @@ int main( int argc, char *argv[]) {
 	Int_t parIniSize;
 	vector<Double_t> parErr;
 
+    std::array<double, 2> doping_peakheight;
+    std::array<double, 2> doping_peakpos;    
+    std::array<double, 2> doping_gauss_sigma;
+    
+    
 	//Number of threads
 	num_threads = atoi(argv[1]);
 
@@ -188,10 +193,11 @@ int main( int argc, char *argv[]) {
 		for (int j = 0; j < num_threads; j++) {
 
 			vItotals[i] = vItotals[i] + TRACSsim[j]->vSemiItotals[i];
-
-
 		}
 	}
+
+    std::cout << "Finish the first run before entering the fitting procedure " << std::endl;
+    std::cout << std::endl;
 	/*****vItotals is taking TH1D values for fitting purposes. First ramo, then convolution, then TH1D goes to vItotals*****/
 
 	if (global_TF != "NO_TF") {
@@ -279,6 +285,14 @@ int main( int argc, char *argv[]) {
 		}
 		count = 0;
 		count2 = 0;
+
+        // Since i_rc_array[i] is no longer used,  to avoid memory leak,
+        // delete the pointer. (update from v1.1)
+        for (int i = 0 ; i < i_rc_array.size() ; i++)
+        {
+            delete i_rc_array[i];
+            i_rc_array[i] = nullptr;
+        }                
 	}
     
 	/********Finish this part*********/
@@ -405,7 +419,17 @@ int main( int argc, char *argv[]) {
 		fitParamDepth = TRACSsim[0]->get_depth();
 		fitParamCapac = TRACSsim[0]->get_capacitance();
 
-		parIni = {fitParamNorm, fitParamVdep, fitParamDepth, fitParamCapac};
+        // Get doping parameters for LGADs
+        doping_peakheight = TRACSsim[0]->get_doping_param();
+        /*
+        std::tuple< std::array<double, 2>, std::array<double, 2>, std::array<double, 2> > doping_param= get_doping_param();
+        doping_peakheight = std::get<0>( doping_param );
+        doping_peakpos      = std::get<1>( doping_param );
+        doping_gauss_sigma = std::get<2>( doping_param );
+        */
+        
+		//parIni = {fitParamNorm, fitParamVdep, fitParamDepth, fitParamCapac};   // original
+		parIni = {fitParamNorm, fitParamVdep, fitParamDepth, fitParamCapac, doping_peakheight[0]};        
 		parIniSize = parIni.size() ;
 
 		parErr.resize(parIniSize);
@@ -417,6 +441,8 @@ int main( int argc, char *argv[]) {
 		parErr[2]=100.    ;
 		parErr[3]=5.e-12 ;
 
+        parErr[4]=10e+17 ;        
+
 		//Pass parameters to Minuit
 		MnUserParameters upar(parIni,parErr) ;
 		for ( int i=0 ; i < parIniSize ; i++ ) {
@@ -424,10 +450,12 @@ int main( int argc, char *argv[]) {
 			upar.SetName( i , pname );
 		}
 
-		//upar.Fix(0) ; //Normalizator
+		upar.Fix(0) ; //Normalizator
 		upar.Fix(1); //Depletion voltage
 		upar.Fix(2); //Detector depth
-		upar.Fix(3); //Capacitance        
+		upar.Fix(3); //Capacitance
+
+        //upar.Fix(4); // Neff doping height
 
 		std::cout << "=============================================" << std::endl;
 		std::cout << "Initial parameters: "<<upar<<std::endl;
@@ -561,7 +589,7 @@ int main( int argc, char *argv[]) {
 			i_rc = nullptr;
 			count2++;
 
-
+            
 		}
 
 		for (int i = 0 ; i < i_rc_array.size() ; i++){
@@ -572,6 +600,15 @@ int main( int argc, char *argv[]) {
 		}
 		count = 0;
 		count2 = 0;
+
+        // Since i_rc_array[i] is no longer used,  to avoid memory leak,
+        // delete the pointer. (update from v1.1)
+        for (int i = 0 ; i < i_rc_array.size() ; i++)
+        {
+            delete i_rc_array[i];
+            i_rc_array[i] = nullptr;
+        }
+            
 	}
 
 
@@ -589,7 +626,10 @@ int main( int argc, char *argv[]) {
 
 	// Create branches
 	//tout->Branch("raw", &emo,32000,0);      // original
-	tout->Branch("raw", &emo,500000,0);    
+
+    // temporal update (v1.1)
+	//tout->Branch("raw", &emo,500000,1);
+	tout->Branch("raw", &emo,500000,1);          
 
 	//Read RAW file
 	TRACSsim[0]->DumpToTree( emo , tout ) ;
@@ -732,6 +772,14 @@ Double_t TRACSFit::operator() ( const std::vector<Double_t>& par  ) const {
 		}
 		count = 0;
 		count2 = 0;
+
+        // Since i_rc_array[i] is no longer used,  to avoid memory leak,
+        // delete the pointer. (update from v1.1)
+        for (int i = 0 ; i < i_rc_array.size() ; i++)
+        {
+            delete i_rc_array[i];
+            i_rc_array[i] = nullptr;
+        }        
 	}
 
 	/********Finish convolution part*********/
@@ -764,7 +812,8 @@ Double_t TRACSFit::operator() ( const std::vector<Double_t>& par  ) const {
 	emo->Qt   = new Double_t [emo->Nt] ;
 
 	// Create branches
-	tout->Branch("raw", &emo,32000,0);
+	//tout->Branch("raw", &emo,32000,0);
+    tout->Branch("raw", &emo,500000,1);      
 
 	//Read RAW file
 	TRACSsim[0]->DumpToTree( emo , tout ) ;

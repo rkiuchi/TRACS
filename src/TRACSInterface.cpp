@@ -510,6 +510,10 @@ void TRACSInterface::set_Fit_Norm(std::vector<double> vector_fitTri)
 	vDepletion = vector_fitTri[1];
 	depth = vector_fitTri[2];
 	C = vector_fitTri[3];
+
+    // update the doping parameters
+    _doping_param[0][0] = vector_fitTri[4];
+        
 	delete detector;
 	std::unique_lock<std::mutex> guard(mtx2);
     detector = new SMSDetector(pitch, width, depth, nns, bulk_type, implant_type, _set_avalanche_flag, _doping_param,
@@ -606,12 +610,14 @@ void TRACSInterface::loop_on(int tid)
 
                 if( _after_fitting_process )
                 {
-                    // Reflect the scaling factor from the fitting. 
+                    // Reflect the scaling factor from the fitting.  -- OFF. scaling factor is set inside of fitting 
+                    /*
                     i_total *= fitNorm;
                     i_elec *= fitNorm;
                     i_hole *= fitNorm;
                     i_gen_elec *= fitNorm;
                     i_gen_hole *= fitNorm;
+                    */
                     
                     // Temporally, reflect the polarity setting for the simulation.
                     if( _simulation_polarity_inverse_flag == "yes" )
@@ -664,12 +670,14 @@ void TRACSInterface::loop_on(int tid)
 
                 if( _after_fitting_process )
                 {
-                    // Reflect the scaling factor from the fitting. Default value of "fitNorm" is 1.
+                    // Reflect the scaling factor from the fitting.  -- OFF. scaling factor is set inside of fitting
+                    /*
                     i_total *= fitNorm;
                     i_elec *= fitNorm;
                     i_hole *= fitNorm;
                     i_gen_elec *= fitNorm;
                     i_gen_hole *= fitNorm;
+                    */
                     
                     // Temporally, reflect the polarity setting for the simulation.
                     if( _simulation_polarity_inverse_flag == "yes" )

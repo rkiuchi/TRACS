@@ -248,8 +248,17 @@ public:
 	int GettotalCrosses();
 	double get_Itemp(int, int);
 
-
-
+    std::array<double, 2>  get_doping_param()
+    {
+        return _doping_peakheight;
+    }
+    /*
+    std::tuple< std::array<double, 2>, std::array<double, 2>, std::array<double, 2> > get_doping_param()
+    {
+        return std::make_tuple< _doping_peakheight, _doping_peakpos, _doping_gauss_sigma >;
+    }
+    */
+    
 	//Loops
 	void loop_on(int tid = 0); //MULTITHREADING
 	void loop_on_topBottom();
